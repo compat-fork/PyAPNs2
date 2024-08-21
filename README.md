@@ -1,3 +1,19 @@
+# compat-fork-apns2
+
+This is a fork of the [apns2](https://github.com/compat-fork/PyAPNs2)
+library to provide compatibility with newer versions of Python and of the
+pyjwt library. It is
+maintained by the [compat-fork](https://github.com/compat-fork) project.
+
+compat-fork changelog:
+* Version 0.8.0
+  * No significant code changes from upstream `master`
+  * No longer declare support for Python 3.7 (it probably still works
+    but we're not in the business of supporting unsupported Python versions)
+  * Support pyjwt 2
+
+Original README follows:
+
 # PyAPNs2
 
 [![PyPI version](https://img.shields.io/pypi/v/apns2.svg)](https://pypi.python.org/pypi/apns2)

@@ -3,7 +3,8 @@ from unittest.mock import MagicMock, Mock, patch
 
 import pytest
 
-from apns2.client import APNsClient, Credentials, CONCURRENT_STREAMS_SAFETY_MAXIMUM, Notification
+from apns2.client import APNsClient, CONCURRENT_STREAMS_SAFETY_MAXIMUM, Notification
+from apns2.credentials import Credentials
 from apns2.errors import ConnectionFailed
 from apns2.payload import Payload
 
