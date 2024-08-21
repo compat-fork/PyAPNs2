@@ -24,7 +24,8 @@ class CertificateCredentials(Credentials):
     def __init__(self, cert_file: Optional[Union[str, bytes, PathLike[str], PathLike[bytes]]] = None,
                  password: Optional[str] = None) -> None:
         ssl_context = ssl.create_default_context()
-        ssl_context.load_cert_chain(cert_file, password=password)
+        if cert_file is not None:
+            ssl_context.load_cert_chain(cert_file, password=password)
         super(CertificateCredentials, self).__init__(ssl_context)
 
 

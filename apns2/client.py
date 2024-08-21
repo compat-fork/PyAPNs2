@@ -2,6 +2,7 @@ import collections
 import httpx
 import json
 import logging
+import ssl
 from enum import Enum
 from typing import Dict, Iterable, Optional, Tuple, Union
 
@@ -51,7 +52,7 @@ class APNsClient(object):
                  heartbeat_period: Optional[float] = None) -> None:
 
         if isinstance(credentials, str):
-            self.__credentials = CertificateCredentials(credentials, password)
+            self.__credentials: Credentials = CertificateCredentials(credentials, password)
         else:
             self.__credentials = credentials
 
@@ -70,7 +71,8 @@ class APNsClient(object):
     def send_notification(self, token_hex: str, notification: Payload, topic: Optional[str] = None,
                           priority: NotificationPriority = NotificationPriority.Immediate,
                           expiration: Optional[int] = None, collapse_id: Optional[str] = None) -> None:
-        with httpx.Client(http2=True, verify=self.__credentials.ssl_context) as client:
+        verify: Union[bool, ssl.SSLContext] = self.__credentials.ssl_context if self.__credentials.ssl_context is not None else True
+        with httpx.Client(http2=True, verify=verify) as client:
             status, reason = self.send_notification_sync(token_hex, notification, client, topic, priority, expiration,
                                                          collapse_id)
 
@@ -81,7 +83,7 @@ class APNsClient(object):
                                topic: Optional[str] = None,
                                priority: NotificationPriority = NotificationPriority.Immediate,
                                expiration: Optional[int] = None, collapse_id: Optional[str] = None,
-                               push_type: Optional[NotificationType] = None) -> int:
+                               push_type: Optional[NotificationType] = None) -> Tuple[int, str]:
         json_str = json.dumps(notification.dict(), cls=self.__json_encoder, ensure_ascii=False, separators=(',', ':'))
         json_payload = json_str.encode('utf-8')
 
@@ -126,7 +128,7 @@ class APNsClient(object):
             headers['apns-collapse-id'] = collapse_id
 
         url = f'https://{self.__server}:{self.__port}/3/device/{token_hex}'
-        response = client.post(url, headers=headers, data=json_payload)
+        response = client.post(url, headers=headers, content=json_payload)
         return response.status_code, response.text
 
     def get_notification_result(self, status: int, reason: str) -> Union[str, Tuple[str, str]]:
@@ -153,7 +155,8 @@ class APNsClient(object):
         results = {}
 
         # Loop over notifications
-        with httpx.Client(http2=True, verify=self.__credentials.ssl_context) as client:
+        verify: Union[bool, ssl.SSLContext] = self.__credentials.ssl_context if self.__credentials.ssl_context is not None else True
+        with httpx.Client(http2=True, verify=verify) as client:
             for next_notification in notifications:
                 logger.info('Sending to token %s', next_notification.token)
                 status, reason = self.send_notification_sync(next_notification.token, next_notification.payload, client,
