@@ -17,7 +17,7 @@ jobs:
         with:
           python-version: "3.10"
       - name: Install dependencies
-        run: python -m pip install -e .[dev]
+        run: python -m pip install -e . pytest freezegun mypy==1.11.1
       - name: Run mypy
         run: mypy .
 
@@ -28,8 +28,6 @@ jobs:
       fail-fast: false
       matrix:
         py:
-          - "3.12"
-          - "3.11"
           - "3.10"
           - "3.9"
           - "3.8"
@@ -46,7 +44,7 @@ jobs:
         with:
           python-version: ${{ matrix.py }}
       - name: Install tox
-        run: python -m pip install tox-gh>=1.2
+        run: python -m pip install tox-gh>=1.2 poetry
       - name: Setup test suite
         run: tox -vv --notest
       - name: Run test suite

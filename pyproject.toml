@@ -32,7 +32,6 @@ pyjwt = ">=2.0.0"
 [tool.poetry.dev-dependencies]
 pytest = "*"
 freezegun = "*"
-mypy = "1.11.1"
 
 [tool.mypy]
 python_version = "3.8"
