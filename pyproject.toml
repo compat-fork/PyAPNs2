@@ -36,6 +36,8 @@ freezegun = "*"
 [tool.mypy]
 python_version = "3.8"
 strict = true
+disallow_untyped_calls = true
+disallow_untyped_defs = false
 
 [tool.pylint.design]
 max-args = 10
