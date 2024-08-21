@@ -7,7 +7,9 @@ maintained by the [compat-fork](https://github.com/compat-fork) project.
 
 compat-fork changelog:
 * Version 0.8.0
-  * Declare support for Python 3.10; drop support for Python 3.7
+  * No significant code changes from upstream `master`
+  * No longer declare support for Python 3.7 (it probably still works
+    but we're not in the business of supporting unsupported Python versions)
   * Support pyjwt 2
 
 Original README follows:
